@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Tidal More Albums
 // @namespace    https://github.com/pawllo01/tidal-more-albums
-// @version      1.1
+// @version      1.1.1
 // @description  Show all releases in artists' discographies.
 // @author       pawllo01
 // @match        https://tidal.com/*
@@ -68,7 +68,7 @@
       const artistId = getArtistIdFromUrl(location.href);
       if (!artistId) return;
 
-      const containers = document.querySelectorAll('div._buttonContainer_a150d77');
+      const containers = document.querySelectorAll('div[class*="_buttonContainer_"]');
 
       containers.forEach((container) => {
         if (container.querySelector('a.custom-link')) return; // skip if custom link was added
