@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Tidal More Albums
 // @namespace    https://github.com/pawllo01/tidal-more-albums
-// @version      1.1.1
+// @version      1.2
 // @description  Show all releases in artists' discographies.
 // @author       pawllo01
 // @match        https://tidal.com/*
@@ -69,19 +69,16 @@
       if (!artistId) return;
 
       const containers = document.querySelectorAll('div[class*="_buttonContainer_"]');
+      if (containers.length < 3) return;
 
-      containers.forEach((container) => {
-        if (container.querySelector('a.custom-link')) return; // skip if custom link was added
+      const albumsContainer = containers[1];
+      const singlesContainer = containers[2];
 
-        const originalLink = container.querySelector('a[data-test="view-all-link"]');
-        const href = originalLink?.href || '';
+      if (!albumsContainer.querySelector('a.custom-link'))
+        albumsContainer.append(createLink('albums', artistId));
 
-        if (href.includes('ARTIST_ALBUMS')) {
-          container.append(createLink('albums', artistId));
-        } else if (href.includes('ARTIST_TOP_SINGLES')) {
-          container.append(createLink('singles', artistId));
-        }
-      });
+      if (!singlesContainer.querySelector('a.custom-link'))
+        singlesContainer.append(createLink('singles', artistId));
     }
 
     function createLink(type, artistId) {
@@ -103,6 +100,7 @@
       customLink.style.backgroundColor = '#da2013';
       customLink.style.borderRadius = '6px';
       customLink.style.paddingLeft = '6px';
+      customLink.style.paddingRight = '6px';
 
       customLink.addEventListener('click', (e) => {
         e.preventDefault();
